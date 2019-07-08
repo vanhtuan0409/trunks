@@ -10,6 +10,8 @@ Trunks is a lightweight, template-based load testing tool built upon [vegeta](ht
 
 #### Pre-built binary
 
+Please checkout [Release page](https://github.com/vanhtuan0409/trunks/releases)
+
 #### Source
 
 You need `go` installed and `GOBIN` in your `PATH`. Once that is done, run the command:
