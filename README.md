@@ -4,7 +4,7 @@
   <img src="./resources/trunks.png"
 </p>
 
-Trunks is a lightweight, template-based load testing tool built uppon [vegeta](https://github.com/tsenart/vegeta). Trunks combined the power of Vegeta and Golang Template to generate randomized data, mimics the pattern of real-live traffic.
+Trunks is a lightweight, template-based load testing tool built upon [vegeta](https://github.com/tsenart/vegeta). Trunks combined the power of Vegeta and Golang Template to generate randomized data, mimics the pattern of real-live traffic.
 
 ### Installation
 
@@ -83,6 +83,8 @@ targets:
       }
 ```
 
+Go template functions are powered by [Sprig](http://masterminds.github.io/sprig/)
+
 #### `meta.headers`
 
 Specifies common Header for all targets. Not allow templating
@@ -101,7 +103,7 @@ Specifies HTTP Body for load test request. Allow templating and only taken into 
 
 #### `targets[].headers`
 
-Request-specific headers, will override [meta.headers](#meta.headers) if duplicated.
+Request-specific headers, will override [`meta.headers`](#meta.headers) if duplicated.
 
 #### `targets[].repeat`
 
