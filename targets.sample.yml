@@ -7,8 +7,8 @@ targets:
     method: GET
     repeat: 2
     headers:
-      Authorization: "Bearer xxxxx"
-  - path: "/api2"
+      Authorization: "Bearer xxx"
+  - path: "/api2?token={{ randAlphaNum 12 }}"
     method: POST
     repeat: 3
     body: |
