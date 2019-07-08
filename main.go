@@ -15,6 +15,7 @@ var (
 	f     = flag.String("target", "targets.yml", "Targets config file path")
 	r     = flag.Int("rate", 5, "Request per second to send")
 	d     = flag.Int("duration", 0, "Duration to run the request (in seconds)")
+	o     = flag.String("output", "", "Output file (default \"stdout\")")
 	debug = flag.Bool("debug", false, "Print debug log")
 )
 
@@ -47,19 +48,20 @@ func main() {
 		attacker.Stop()
 	}()
 
-	fmt.Printf("Running load test with rate %d and duration %d\n", *r, *d)
-
-	var metrics vegeta.Metrics
-	for res := range attacker.Attack(targeter, rate, duration, "Bazookaaa!") {
-		metrics.Add(res)
+	var encoder vegeta.Encoder
+	if *o == "" {
+		encoder = vegeta.NewEncoder(os.Stdout)
+	} else {
+		f, err := os.OpenFile(*o, os.O_RDWR|os.O_CREATE, 0755)
+		if err != nil {
+			fmt.Printf("Failed to open output file. ERR: %v\n", err)
+			return
+		}
+		defer f.Close()
+		encoder = vegeta.NewEncoder(f)
 	}
-	metrics.Close()
 
-	fmt.Printf("Average: %s\n", metrics.Latencies.Mean)
-	fmt.Printf("99th percentile: %s\n", metrics.Latencies.P99)
-	fmt.Printf("Total: %d\n", metrics.Requests)
-	fmt.Printf("Success rate: %.2f%%\n", metrics.Success*100)
-	for code, count := range metrics.StatusCodes {
-		fmt.Printf("Status code %s: %d\n", code, count)
+	for res := range attacker.Attack(targeter, rate, duration, "Bazookaaa!") {
+		encoder.Encode(res)
 	}
 }
