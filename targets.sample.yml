@@ -1,0 +1,15 @@
+meta:
+  host: http://localhost:8080
+  headers:
+    Accept: application/json
+targets:
+  - path: "/api1?lat={{ randInt 1 100 }}&long={{ randInt 1 100 }}"
+    method: GET
+    repeat: 2
+  - path: "/api2"
+    method: POST
+    repeat: 3
+    body: |
+      {
+        "timestamp": {{ timestamp }},
+      }
