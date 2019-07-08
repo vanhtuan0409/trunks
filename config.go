@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -54,11 +53,6 @@ func parseConfig(fPath string) (*Config, error) {
 	for _, t := range targets.Targets {
 		header := convertHeaderMap(mergeHeader(targets.Meta.Headers, t.Headers))
 		t.header = header
-
-		t.Path = fmt.Sprintf("%s%s", targets.Meta.Host, t.Path)
-		if t.Repeat < 1 {
-			t.Repeat = 1
-		}
 	}
 
 	return &targets, nil

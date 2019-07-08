@@ -1,14 +1,13 @@
 meta:
-  host: http://localhost:8080
   headers:
     Accept: application/json
 targets:
-  - path: "/api1?lat={{ randNumeric 3 }}&long={{ randNumeric 3 }}"
+  - url: "http://localhost:8080/api1?lat={{ randNumeric 3 }}&long={{ randNumeric 3 }}"
     method: GET
     repeat: 2
     headers:
       Authorization: "Bearer xxx"
-  - path: "/api2?token={{ randAlphaNum 12 }}"
+  - url: "http://localhost:8080/api2?token={{ randAlphaNum 12 }}"
     method: POST
     repeat: 3
     body: |

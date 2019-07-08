@@ -15,7 +15,7 @@ var (
 )
 
 type Target struct {
-	Path         string            `yaml:"path"`
+	URL          string            `yaml:"url"`
 	Method       string            `yaml:"method"`
 	Boby         string            `yaml:"body"`
 	Repeat       int               `yaml:"repeat"`
@@ -26,7 +26,7 @@ type Target struct {
 }
 
 func (t *Target) parseTemplate() error {
-	pTpl, err := template.New("path").Funcs(sprig.TxtFuncMap()).Parse(t.Path)
+	pTpl, err := template.New("path").Funcs(sprig.TxtFuncMap()).Parse(t.URL)
 	if err != nil {
 		return err
 	}
