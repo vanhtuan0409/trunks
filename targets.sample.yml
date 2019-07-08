@@ -3,7 +3,7 @@ meta:
   headers:
     Accept: application/json
 targets:
-  - path: "/api1?lat={{ randInt 1 100 }}&long={{ randInt 1 100 }}"
+  - path: "/api1?lat={{ randNumeric 3 }}&long={{ randNumeric 3 }}"
     method: GET
     repeat: 2
     headers:
@@ -13,5 +13,5 @@ targets:
     repeat: 3
     body: |
       {
-        "timestamp": {{ timestamp }},
+        "timestamp": {{ now | unixEpoch }},
       }

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"text/template"
 
+	"github.com/Masterminds/sprig"
 	vegeta "github.com/tsenart/vegeta/lib"
 )
 
@@ -25,14 +26,14 @@ type Target struct {
 }
 
 func (t *Target) parseTemplate() error {
-	pTpl, err := template.New("path").Funcs(tplFns).Parse(t.Path)
+	pTpl, err := template.New("path").Funcs(sprig.TxtFuncMap()).Parse(t.Path)
 	if err != nil {
 		return err
 	}
 	t.pathTemplate = pTpl
 
 	if t.Boby != "" && t.Method != http.MethodGet {
-		bTpl, err := template.New("body").Funcs(tplFns).Parse(t.Boby)
+		bTpl, err := template.New("body").Funcs(sprig.TxtFuncMap()).Parse(t.Boby)
 		if err != nil {
 			return err
 		}

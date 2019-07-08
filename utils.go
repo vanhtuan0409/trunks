@@ -5,26 +5,9 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
-	"text/template"
-	"time"
 
 	vegeta "github.com/tsenart/vegeta/lib"
 )
-
-var (
-	tplFns template.FuncMap = map[string]interface{}{
-		"randInt":   randInt,
-		"timestamp": timestamp,
-	}
-)
-
-func randInt(min, max int) int {
-	return min + rand.Intn(max-min)
-}
-
-func timestamp() int64 {
-	return time.Now().Unix()
-}
 
 func printDebug(t *vegeta.Target, debugger io.Writer) {
 	fmt.Fprintf(debugger, "%s %s\n", t.Method, t.URL)
