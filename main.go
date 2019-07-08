@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -15,8 +17,10 @@ var (
 	f     = flag.String("target", "targets.yml", "Targets config file path")
 	r     = flag.Int("rate", 5, "Request per second to send")
 	d     = flag.Int("duration", 0, "Duration to run the request (in seconds)")
-	o     = flag.String("output", "", "Output file (default \"stdout\")")
-	debug = flag.Bool("debug", false, "Print debug log")
+	o     = flag.String("output", "", "Output file (default: \"stdout\")")
+	debug = flag.String("debug", "", "Write debug log to file (default: discard)")
+
+	debugLogFile io.Writer
 )
 
 func init() {
@@ -30,6 +34,19 @@ func main() {
 	if err != nil {
 		fmt.Printf("Failed to parse target config file. ERR: %v\n", err)
 		return
+	}
+
+	if *debug == "" {
+		debugLogFile = ioutil.Discard
+	} else {
+		f, err := os.OpenFile(*debug, os.O_RDWR|os.O_CREATE, 0755)
+		if err != nil {
+			debugLogFile = ioutil.Discard
+			fmt.Printf("Warning: Failed to open debug log file. Ignore writing debug log. ERR: %v\n", err)
+		} else {
+			defer f.Close()
+			debugLogFile = f
+		}
 	}
 
 	rate := vegeta.Rate{Freq: *r, Per: time.Second}

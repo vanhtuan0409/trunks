@@ -26,9 +26,9 @@ func timestamp() int64 {
 }
 
 func printDebug(t *vegeta.Target) {
-	fmt.Printf("%s %s\n", t.Method, t.URL)
+	fmt.Fprintf(debugLogFile, "%s %s\n", t.Method, t.URL)
 	if t.Method != http.MethodGet && len(t.Body) > 0 {
-		fmt.Printf("%s\n", string(t.Body))
+		fmt.Fprintf(debugLogFile, "%s\n", string(t.Body))
 	}
 }
 

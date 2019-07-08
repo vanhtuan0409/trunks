@@ -43,9 +43,7 @@ func newTargeter(conf *Config) (vegeta.Targeter, error) {
 			return err
 		}
 
-		if *debug {
-			printDebug(t)
-		}
+		printDebug(t)
 		return nil
 	}, nil
 }
