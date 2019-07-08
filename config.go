@@ -9,8 +9,9 @@ import (
 )
 
 type Meta struct {
-	Host    string            `yaml:"host"`
-	Headers map[string]string `yaml:"headers"`
+	Host        string            `yaml:"host"`
+	Headers     map[string]string `yaml:"headers"`
+	SkipShuffle bool              `yaml:"skip_shuffle"`
 }
 
 type Config struct {
@@ -26,6 +27,17 @@ func convertHeaderMap(hm map[string]string) http.Header {
 	return header
 }
 
+func mergeHeader(h1 map[string]string, h2 map[string]string) map[string]string {
+	res := make(map[string]string, len(h1)+len(h2))
+	for k, v := range h1 {
+		res[k] = v
+	}
+	for k, v := range h2 {
+		res[k] = v
+	}
+	return res
+}
+
 func parseConfig(fPath string) (*Config, error) {
 	content, err := ioutil.ReadFile(fPath)
 	if err != nil {
@@ -39,9 +51,10 @@ func parseConfig(fPath string) (*Config, error) {
 	}
 
 	// Pre-processing
-	header := convertHeaderMap(targets.Meta.Headers)
 	for _, t := range targets.Targets {
-		t.Header = header
+		header := convertHeaderMap(mergeHeader(targets.Meta.Headers, t.Headers))
+		t.header = header
+
 		t.Path = fmt.Sprintf("%s%s", targets.Meta.Host, t.Path)
 		if t.Repeat < 1 {
 			t.Repeat = 1

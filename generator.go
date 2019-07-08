@@ -26,7 +26,10 @@ func newTargeter(conf *Config) (vegeta.Targeter, error) {
 			targets = append(targets, t)
 		}
 	}
-	shuffleRequest(targets)
+
+	if !conf.Meta.SkipShuffle {
+		shuffleRequest(targets)
+	}
 
 	return func(t *vegeta.Target) error {
 		if t == nil {

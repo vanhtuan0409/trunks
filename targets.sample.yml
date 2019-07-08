@@ -6,6 +6,8 @@ targets:
   - path: "/api1?lat={{ randInt 1 100 }}&long={{ randInt 1 100 }}"
     method: GET
     repeat: 2
+    headers:
+      Authorization: "Bearer xxxxx"
   - path: "/api2"
     method: POST
     repeat: 3

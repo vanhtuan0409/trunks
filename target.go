@@ -14,11 +14,12 @@ var (
 )
 
 type Target struct {
-	Path         string `yaml:"path"`
-	Method       string `yaml:"method"`
-	Boby         string `yaml:"body"`
-	Repeat       int    `yaml:"repeat"`
-	Header       http.Header
+	Path         string            `yaml:"path"`
+	Method       string            `yaml:"method"`
+	Boby         string            `yaml:"body"`
+	Repeat       int               `yaml:"repeat"`
+	Headers      map[string]string `yaml:"headers"`
+	header       http.Header
 	pathTemplate *template.Template
 	bodyTemplate *template.Template
 }
@@ -69,7 +70,7 @@ func (t *Target) interpolateBody(data interface{}) (string, error) {
 
 func (t *Target) toVegetaTarget(target *vegeta.Target, data interface{}) error {
 	target.Method = t.Method
-	target.Header = t.Header
+	target.Header = t.header
 
 	path, err := t.interpolatePath(data)
 	if err != nil {
