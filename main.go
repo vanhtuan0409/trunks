@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"os/signal"
+	"runtime"
 	"time"
 
 	vegeta "github.com/tsenart/vegeta/lib"
@@ -17,8 +18,14 @@ var (
 	f     = flag.String("target", "targets.yml", "Targets config file path")
 	r     = flag.Int("rate", 5, "Request per second to send")
 	d     = flag.Int("duration", 0, "Duration to run the request (in seconds)")
-	o     = flag.String("output", "", "Output file (default: \"stdout\")")
-	debug = flag.String("debug", "", "Write debug log to file (default: discard)")
+	o     = flag.String("output", "", "Output file (default \"stdout\")")
+	debug = flag.String("debug", "", "Write debug log to file (default discard)")
+	v     = flag.Bool("version", false, "Print version and exit")
+
+	// Set at linking time
+	Commit  string
+	Date    string
+	Version string
 )
 
 func init() {
@@ -50,6 +57,17 @@ func getOutputFile() (io.Writer, error) {
 
 func main() {
 	flag.Parse()
+
+	if *v {
+		fmt.Printf("Version: %s - Commit: %s - Runtime: %s %s %s - Date: %s\n",
+			Version,
+			Commit,
+			runtime.Version(),
+			runtime.GOOS,
+			runtime.GOARCH,
+			Date)
+		return
+	}
 
 	targets, err := parseConfig(*f)
 	if err != nil {
