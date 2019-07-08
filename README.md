@@ -103,7 +103,7 @@ Specifies HTTP Body for load test request. Allow templating and only taken into 
 
 #### `targets[].headers`
 
-Request-specific headers, will override [`meta.headers`](#meta.headers) if duplicated.
+Request-specific headers, will override [`meta.headers`](#metaheaders) if duplicated.
 
 #### `targets[].repeat`
 
