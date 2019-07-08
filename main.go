@@ -29,7 +29,7 @@ func getDebugFile() io.Writer {
 	if *debug == "" {
 		return ioutil.Discard
 	}
-	f, err := os.OpenFile(*debug, os.O_RDWR|os.O_CREATE, 0755)
+	f, err := os.OpenFile(*debug, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		fmt.Printf("Warning: Failed to open debug log file. Ignore writing debug log. ERR: %v\n", err)
 		return ioutil.Discard
@@ -41,7 +41,7 @@ func getOutputFile() (io.Writer, error) {
 	if *o == "" {
 		return os.Stdout, nil
 	}
-	f, err := os.OpenFile(*o, os.O_RDWR|os.O_CREATE, 0755)
+	f, err := os.OpenFile(*o, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return nil, err
 	}
