@@ -1,3 +1,5 @@
 # Trunks
 
-![Trunks](./resources/trunks.png)
+<p align="center">
+  <img src="./resources/trunks.png"
+</p>
