@@ -6,6 +6,10 @@
 
 Trunks is a lightweight, template-based load testing tool built upon [vegeta](https://github.com/tsenart/vegeta). Trunks combined the power of Vegeta and Golang Template to generate randomized data, mimics the pattern of real-live traffic.
 
+If you like my work, consider buy me a coffee :D
+
+<a href="https://www.buymeacoffee.com/sHZbgvYh0" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
 ### Installation
 
 #### Pre-built binary
