@@ -19,12 +19,33 @@ var (
 	d     = flag.Int("duration", 0, "Duration to run the request (in seconds)")
 	o     = flag.String("output", "", "Output file (default: \"stdout\")")
 	debug = flag.String("debug", "", "Write debug log to file (default: discard)")
-
-	debugLogFile io.Writer
 )
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
+}
+
+func getDebugFile() io.Writer {
+	if *debug == "" {
+		return ioutil.Discard
+	}
+	f, err := os.OpenFile(*debug, os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		fmt.Printf("Warning: Failed to open debug log file. Ignore writing debug log. ERR: %v\n", err)
+		return ioutil.Discard
+	}
+	return f
+}
+
+func getOutputFile() (io.Writer, error) {
+	if *o == "" {
+		return os.Stdout, nil
+	}
+	f, err := os.OpenFile(*o, os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
 }
 
 func main() {
@@ -36,22 +57,23 @@ func main() {
 		return
 	}
 
-	if *debug == "" {
-		debugLogFile = ioutil.Discard
-	} else {
-		f, err := os.OpenFile(*debug, os.O_RDWR|os.O_CREATE, 0755)
-		if err != nil {
-			debugLogFile = ioutil.Discard
-			fmt.Printf("Warning: Failed to open debug log file. Ignore writing debug log. ERR: %v\n", err)
-		} else {
-			defer f.Close()
-			debugLogFile = f
-		}
+	debugger := getDebugFile()
+	if f, ok := debugger.(*os.File); ok {
+		defer f.Close()
+	}
+
+	out, err := getOutputFile()
+	if err != nil {
+		fmt.Printf("Failed to open output file. ERR: %v\n", err)
+		return
+	}
+	if f, ok := out.(*os.File); ok {
+		defer f.Close()
 	}
 
 	rate := vegeta.Rate{Freq: *r, Per: time.Second}
 	duration := time.Duration(*d) * time.Second
-	targeter, err := newTargeter(targets)
+	targeter, err := newTargeter(targets, debugger)
 	if err != nil {
 		fmt.Printf("Failed to initialize targeter. ERR: %v", err)
 		return
@@ -65,19 +87,7 @@ func main() {
 		attacker.Stop()
 	}()
 
-	var encoder vegeta.Encoder
-	if *o == "" {
-		encoder = vegeta.NewEncoder(os.Stdout)
-	} else {
-		f, err := os.OpenFile(*o, os.O_RDWR|os.O_CREATE, 0755)
-		if err != nil {
-			fmt.Printf("Failed to open output file. ERR: %v\n", err)
-			return
-		}
-		defer f.Close()
-		encoder = vegeta.NewEncoder(f)
-	}
-
+	encoder := vegeta.NewEncoder(out)
 	for res := range attacker.Attack(targeter, rate, duration, "Bazookaaa!") {
 		encoder.Encode(res)
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"io"
 	"sync/atomic"
 
 	vegeta "github.com/tsenart/vegeta/lib"
@@ -11,7 +12,7 @@ var (
 	errNilTarget = errors.New("Nil target")
 )
 
-func newTargeter(conf *Config) (vegeta.Targeter, error) {
+func newTargeter(conf *Config, debugger io.Writer) (vegeta.Targeter, error) {
 	i := int64(-1)
 	targets := []*Target{}
 
@@ -43,7 +44,7 @@ func newTargeter(conf *Config) (vegeta.Targeter, error) {
 			return err
 		}
 
-		printDebug(t)
+		printDebug(t, debugger)
 		return nil
 	}, nil
 }

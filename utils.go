@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"text/template"
@@ -25,10 +26,10 @@ func timestamp() int64 {
 	return time.Now().Unix()
 }
 
-func printDebug(t *vegeta.Target) {
-	fmt.Fprintf(debugLogFile, "%s %s\n", t.Method, t.URL)
+func printDebug(t *vegeta.Target, debugger io.Writer) {
+	fmt.Fprintf(debugger, "%s %s\n", t.Method, t.URL)
 	if t.Method != http.MethodGet && len(t.Body) > 0 {
-		fmt.Fprintf(debugLogFile, "%s\n", string(t.Body))
+		fmt.Fprintf(debugger, "%s\n", string(t.Body))
 	}
 }
 
