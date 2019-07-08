@@ -4,7 +4,7 @@
   <img src="./resources/trunks.png"
 </p>
 
-Trunks is a lightweight, template-based load testing tool built upon [vegeta](https://github.com/tsenart/vegeta). Trunks combined the power of Vegeta and Golang Template to generate randomized data, mimics the pattern of real-live traffic.
+Trunks is a lightweight, template-based load testing tool built upon [vegeta](https://github.com/tsenart/vegeta). Trunks combined the power of Vegeta and Golang Template to generate randomized data, mimics the pattern of real-life traffic.
 
 If you like my work, consider buy me a coffee :D
 
@@ -48,7 +48,7 @@ Usage of trunks:
 
 #### `-debug`
 
-Specifies the path of debug log file. It defauls to discarded `/dev/null`
+Specifies the path of debug log file. It defauls to be discarded (`/dev/null`)
 
 #### `-duration`
 
